@@ -1,48 +1,53 @@
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.http.HttpClient;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.io.File;
+import java.sql.*;
 
 /**
- * Created by Adi on 07-Jul-17.
+ * Created by Adi on 08-Jul-17.
  */
-public class DBHandler extends AbstractVerticle{
+public class DBHandler {
 
-    @Override
-    public void start() {
+    Connection con = null;
+    Statement st = null;
+    ResultSet rs = null;
 
-        try
-        {
-            Class.forName("com.microsoft.jdbc.sqlserver.SQLServerDriver");
+    String url = "jdbc:mysql://localhost/t";
+    String user = "";
+    String password = "";
 
-            String userName = "sa";
-            String password = "password";
-            String url = "jdbc:microsoft:sqlserver://localhost:1433"+";databaseName=AdventureWorks2008R2";
-            Connection con = DriverManager.getConnection(url, userName, password);
-            Statement s1 = con.createStatement();
-            ResultSet rs = s1.executeQuery("SELECT TOP 1 * FROM HumanResources.Employee");
-            String[] result = new String[20];
-            if(rs!=null){
-                while (rs.next()){
-                    for(int i = 0; i <result.length ;i++)
-                    {
-                        for(int j = 0; j <result.length;j++)
-                        {
-                            result[j]=rs.getString(i);
-                            System.out.println(result[j]);
-                        }
-                    }
-                }
+
+
+    public File getPhotoFromDB(){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, user, password);
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * FROM posts ORDER BY id DESC LIMIT 1;");
+
+            while(rs.next())
+            {
+                System.out.println(rs.getString("Colomn_Name"));//or getString(1) for coloumn 1 etc
             }
 
-            vertx.eventBus().send(Constants.DB_ANSWER, result);
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (st != null) {
+                    st.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
 
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            } catch (SQLException ex) {
+                ex.getStackTrace();
+            }
         }
+
+
+        return new File("fake file");
     }
 }
