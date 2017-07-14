@@ -10,16 +10,37 @@ public class Manager {
     private RasPiCamera rasPiCamera;
     private ImageProcessor imageProcessor;
 
-    public Manager(){
+    /**
+     * Ctor, inits all its class memnbers
+     */
+    public Manager() {
         this.dbHandler = new DBHandler();
         this.rasPiCamera = new RasPiCamera();
         this.imageProcessor = new ImageProcessor();
     }
 
-    public void start(){
+    /**
+     * Starts the flow
+     */
+    public void start() {
+
+        boolean isValid = false;
+
+        //Takes photo
         File fileFromCamera = rasPiCamera.takePhoto();
-        File fileFromDB = dbHandler.getPhotoFromDB();
-        imageProcessor.compareImage(fileFromCamera, fileFromDB);
+        if(fileFromCamera != null){
+            //Fetch lincense plate number from image
+            String licensePlateToCheck = imageProcessor.fetchLicensePlateNumber(fileFromCamera);
+            if(licensePlateToCheck != null){
+                //validate if the number exists in the csv file
+                isValid = dbHandler.isExist(licensePlateToCheck);
+            }
+
+        }
+
+        //print if valid
+        System.out.println("License " + (isValid ? "is" : "isn't") + " valid!");
+
     }
 
 }

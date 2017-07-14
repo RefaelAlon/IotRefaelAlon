@@ -1,47 +1,39 @@
 
+import com.hopding.jrpicam.RPiCamera;
+import com.hopding.jrpicam.enums.AWB;
+import com.hopding.jrpicam.enums.DRC;
+import com.hopding.jrpicam.enums.Encoding;
+import com.hopding.jrpicam.exceptions.FailedToRunRaspistillException;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+
+import static com.sun.org.apache.xml.internal.serialize.OutputFormat.Defaults.Encoding;
 
 /**
  * Created by Refael on 07-Jul-17.
  */
 public class MainClass {
 
-    public static void main (String [] args){
+    public static void main (String [] args) throws IOException, InterruptedException {
 
-//        Manager manager = new Manager();
-//        manager.start();
-        try {
-            System.out.println();
-            System.out.println();
-//            System.out.println(Base64.encode(extractBytes("C:\\Users\\Adi\\Desktop\\temp\\5.jpg")));
+        //Init manager
+        Manager manager = new Manager();
+        //Start flow
+        manager.start();
 
-            byte[] encodedBytes = Base64.encodeBase64(extractBytes("C:\\Users\\Adi\\Desktop\\temp\\5.jpg"));
-            System.out.println(new String(encodedBytes));
-//            byte[] decodedBytes = Base64.decodeBase64(encodedBytes);
-//            System.out.println("decodedBytes " + new String(decodedBytes));
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    public static byte[] extractBytes (String ImageName) throws IOException {
-        // open image
-        File imgPath = new File(ImageName);
-        BufferedImage bufferedImage = ImageIO.read(imgPath);
 
-        // get DataBufferBytes from Raster
-        WritableRaster raster = bufferedImage .getRaster();
-        DataBufferByte data   = (DataBufferByte) raster.getDataBuffer();
-
-        return ( data.getData() );
-    }
 }

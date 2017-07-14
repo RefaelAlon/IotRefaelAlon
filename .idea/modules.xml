@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/iot.iml" filepath="$PROJECT_DIR$/iot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RasCam/src/main/main.iml" filepath="$PROJECT_DIR$/RasCam/src/main/main.iml" />
     </modules>
   </component>
 </project>

@@ -1,36 +1,67 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 
 /**
  * Created by Adi on 08-Jul-17.
  */
 public class ImageProcessor {
 
-    public boolean compareImage(File fileA, File fileB) {
+    public String fetchLicensePlateNumber(File image){
+        String result = null;
         try {
-            // take buffer data from botm image files //
-            BufferedImage biA = ImageIO.read(fileA);
-            DataBuffer dbA = biA.getData().getDataBuffer();
-            int sizeA = dbA.getSize();
-            BufferedImage biB = ImageIO.read(fileB);
-            DataBuffer dbB = biB.getData().getDataBuffer();
-            int sizeB = dbB.getSize();
-            // compare data-buffer objects //
-            if (sizeA == sizeB) {
-                for (int i = 0; i < sizeA; i++) {
-                    if (dbA.getElem(i) != dbB.getElem(i)) {
-                        return false;
-                    }
+
+            String line;
+            Process p = Runtime.getRuntime().exec("cmd /c  openalpr_64\\alpr.exe " + image.getAbsolutePath());
+
+            BufferedReader bufferedReaderInput = new BufferedReader
+                    (new InputStreamReader(p.getInputStream()));
+
+            BufferedReader bufferedReaderError = new BufferedReader
+                    (new InputStreamReader(p.getErrorStream()));
+
+            int lineCounter = 0;
+
+            String licensePlateInput = null;
+
+            while ((line = bufferedReaderInput.readLine()) != null) {
+
+                if(lineCounter == 1){
+                    licensePlateInput = line;
+                    break;
                 }
-                return true;
-            } else {
-                return false;
+                lineCounter++;
             }
-        } catch (Exception e) {
-            System.out.println("Failed to compare image files ...");
-            return false;
+            bufferedReaderInput.close();
+
+            if(lineCounter == 1){
+                System.out.println("result: "+ licensePlateInput);
+                String [] result1 = licensePlateInput.split("confidence");
+                String [] result2 = result1[0].split("-");
+                System.out.println(result2[1].trim());
+                result = result2[1].trim();
+            }
+            else{
+                System.out.println("No license plate detected!");
+                result = null;
+            }
+
+
+            while ((line = bufferedReaderError.readLine()) != null) {
+                System.out.println(line);
+            }
+            bufferedReaderError.close();
+
+            p.waitFor();
+            System.out.println("Done.");
         }
+        catch (Exception err) {
+            err.printStackTrace();
+        }
+
+        return result;
     }
 }

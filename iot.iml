@@ -33,5 +33,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.6" level="project" />
+    <orderEntry type="module" module-name="main" />
   </component>
 </module>
