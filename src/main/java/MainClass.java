@@ -21,9 +21,6 @@ import java.util.ArrayList;
 
 import static com.sun.org.apache.xml.internal.serialize.OutputFormat.Defaults.Encoding;
 
-/**
- * Created by Refael on 07-Jul-17.
- */
 public class MainClass {
 
     public static void main (String [] args) throws IOException, InterruptedException {

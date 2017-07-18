@@ -1,9 +1,5 @@
 import java.io.File;
 
-
-/**
- * Created by Adi on 07-Jul-17.
- */
 public class Manager {
 
     private DBHandler dbHandler;
@@ -27,10 +23,13 @@ public class Manager {
         boolean isValid = false;
 
         //Takes photo
-        File fileFromCamera = rasPiCamera.takePhoto();
-        if(fileFromCamera != null){
+//        File fileFromCamera = rasPiCamera.takePhoto();
+        //Fake file
+//        File fakeFile = new File("C:\\Users\\Adi\\Desktop\\temp\\5.jpg");
+        File fakeFile = new File("C:\\Users\\Adi\\Desktop\\temp\\4.jpg");
+        if(fakeFile != null){
             //Fetch lincense plate number from image
-            String licensePlateToCheck = imageProcessor.fetchLicensePlateNumber(fileFromCamera);
+            String licensePlateToCheck = imageProcessor.fetchLicensePlateNumber(fakeFile);
             if(licensePlateToCheck != null){
                 //validate if the number exists in the csv file
                 isValid = dbHandler.isExist(licensePlateToCheck);

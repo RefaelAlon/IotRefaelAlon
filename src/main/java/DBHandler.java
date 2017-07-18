@@ -8,9 +8,6 @@ import java.net.URLConnection;
 import java.sql.*;
 import java.util.ArrayList;
 
-/**
- * Created by Adi on 08-Jul-17.
- */
 public class DBHandler {
 
     //This is an array list because we dont know the size of the csv
@@ -38,7 +35,7 @@ public class DBHandler {
             }
             bufferedReader.close();
 
-            System.out.println("Done");
+            System.out.println("*** DB process is done ***");
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

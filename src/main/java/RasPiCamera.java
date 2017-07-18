@@ -8,9 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by Adi on 08-Jul-17.
- */
 public class RasPiCamera {
 
     private String saveDir = "C:\\Users\\Adi\\Desktop\\temp";
